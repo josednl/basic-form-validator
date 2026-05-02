@@ -41,14 +41,14 @@ This document serves as the foundational mandate for Gemini CLI when working on 
 
 ## Roadmap
 
-- [ ] **Basic Field Validation**: Implement string, number, email, and required checks.
-- [ ] **Custom Rules**: Allow users to define additional rules for fields.
-- [ ] **CLI Input Options**: Support file input, JSON string input, and optional configuration flags.
-- [ ] **Testing**: Write Vitest tests covering all validation functions and edge cases.
-- [ ] **Exportable Module**: Ensure the Validator can be imported and used programmatically in other projects.
+- [x] **Basic Field Validation**: Implement string, number, email, and required checks.
+- [x] **Custom Rules**: Allow users to define additional rules for fields.
+- [x] **CLI Input Options**: Support file input, JSON string input, and optional configuration flags.
+- [x] **Testing**: Write Vitest tests covering all validation functions and edge cases.
+- [x] **Exportable Module**: Ensure the Validator can be imported and used programmatically in other projects.
 
 ## Evolution Notes
 
-- [YYYY-MM-DD]: Decision Title
--> Reason: Detailed explanation of why this decision was made
--> Implication: Optional, what impact it has on the project or how it shapes future decisions
+- [2026-05-02]: Initial Implementation
+-> Reason: Completed the core validation engine and CLI interface as per the original design.
+-> Implication: The project is now functional and ready for extension with more rules or complex validation logic.
