@@ -1,0 +1,29 @@
+{
+  "name": "basic-form-validator",
+  "version": "1.0.0",
+  "description": "A modular and functional form validator for Node.js",
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "form-validator": "dist/index.js"
+  },
+  "scripts": {
+    "dev": "tsx src/index.ts",
+    "build": "tsc",
+    "test": "vitest",
+    "precommit": "tsc --noEmit && vitest run"
+  },
+  "keywords": [
+    "validation",
+    "form",
+    "typescript",
+    "cli"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^5.4.5",
+    "tsx": "^4.9.3",
+    "vitest": "^1.6.0"
+  }
+}
