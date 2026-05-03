@@ -46,9 +46,17 @@ This document serves as the foundational mandate for Gemini CLI when working on 
 - [x] **CLI Input Options**: Support file input, JSON string input, and optional configuration flags.
 - [x] **Testing**: Write Vitest tests covering all validation functions and edge cases.
 - [x] **Exportable Module**: Ensure the Validator can be imported and used programmatically in other projects.
+- [ ] **Advanced Validation**: Implement async validations, conditional rules, nested objects/arrays support, and data transformation/sanitization.
+- [ ] **UX & DX**: Add i18n for error messages, type inference from schemas, and CLI output formatters (JSON, Table).
+- [ ] **Ecosystem & Integrations**: Create Express/Fastify middleware, ensure frontend compatibility, and build a schema generator.
+- [ ] **Quality & Performance**: Implement benchmarks for performance testing and configure code coverage reporting.
 
 ## Evolution Notes
 
 - [2026-05-02]: Initial Implementation
 -> Reason: Completed the core validation engine and CLI interface as per the original design.
 -> Implication: The project is now functional and ready for extension with more rules or complex validation logic.
+
+- [2026-05-03]: Roadmap Expansion
+-> Reason: Defined next steps to transform the project into a robust validation library.
+-> Implication: Future work will focus on advanced validation logic, DX improvements, and ecosystem integrations.
