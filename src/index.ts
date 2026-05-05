@@ -51,10 +51,11 @@ Example:
   };
 
   const validator = new Validator(config);
-  const result = validator.validate(data);
+  const result = await validator.validate(data);
 
   if (result.isValid) {
     console.log('Validation successful!');
+    console.log('Sanitized data:', JSON.stringify(result.data, null, 2));
     process.exit(0);
   } else {
     console.error('Validation failed:');
