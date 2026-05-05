@@ -31,3 +31,17 @@ export const isNumber: ValidationRule = (value: any) => {
   }
   return null;
 };
+
+export const when = (
+  condition: (data: any) => boolean | Promise<boolean>,
+  rules: ValidationRule[]
+): ValidationRule => async (value: any, context?: any) => {
+  const shouldRun = await condition(context);
+  if (!shouldRun) return null;
+
+  for (const rule of rules) {
+    const error = await rule(value, context);
+    if (error) return error;
+  }
+  return null;
+};
