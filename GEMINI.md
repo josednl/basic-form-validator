@@ -23,6 +23,7 @@ This document serves as the foundational mandate for Gemini CLI when working on 
 - **Imports**: Always include the .js extension in local imports (ESM requirement).
 - **Types**: Use import type for type-only imports to satisfy verbatimModuleSyntax.
 - **Naming**: Use PascalCase for classes, camelCase for methods and variables.  
+- **Atomic Commits**: Each commit must represent a single, logical, and functional unit of work. Ensure tests pass before committing.
 - **Language**: Source code and documentation in English. CLI messages in English. Comments in English.
 
 ## Key Workflows
