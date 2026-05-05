@@ -1,0 +1,28 @@
+{
+  "data": {
+    "user": {
+      "name": "  jose d  ",
+      "email": "JOSE@Example.com"
+    },
+    "orders": [
+      { "id": "ORD-001", "amount": 50.5, "status": "pending" },
+      { "id": "ORD-002", "amount": "120.75", "status": "shipped" },
+      { "id": "ORD-003", "amount": 0, "status": "processed" }
+    ],
+    "isLate": true,
+    "reason": ""
+  },
+  "config": {
+    "rules": {
+      "user.name": ["required"],
+      "user.email": ["required", "email"],
+      "orders.*.id": ["required"],
+      "orders.*.amount": ["isNumber"]
+    },
+    "sanitizers": {
+      "user.name": ["trim", "toUpperCase"],
+      "user.email": ["trim", "toLowerCase"],
+      "orders.*.amount": ["toNumber"]
+    }
+  }
+}

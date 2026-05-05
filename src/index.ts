@@ -1,9 +1,10 @@
 import fs from 'node:fs';
 import { Validator } from './validator.js';
 import * as rules from './rules.js';
-import type { ValidatorConfig } from './types.js';
+import * as sanitizers from './sanitizers.js';
+import type { ValidatorConfig, FieldRules, FieldSanitizers } from './types.js';
 
-export { Validator, rules };
+export { Validator, rules, sanitizers };
 export * from './types.js';
 
 /**
@@ -40,26 +41,62 @@ Example:
     process.exit(1);
   }
 
-  // Example configuration - In a real scenario, this might come from a config file
-  // For this MVP, we'll look for a 'config' key in the input or use a default
   const data = inputData.data || inputData;
-  const config: ValidatorConfig = inputData.config || {
+  const rawConfig = inputData.config || {
     rules: {
-      email: [rules.required, rules.email],
-      age: [rules.isNumber]
+      email: ['required', 'email'],
+      age: ['isNumber']
     }
   };
 
-  const validator = new Validator(config);
-  const result = await validator.validate(data);
+  // Resolve strings to actual functions
+  const resolvedRules: FieldRules = {};
+  for (const field in rawConfig.rules) {
+    resolvedRules[field] = (rawConfig.rules[field] as any[]).map(r => {
+      if (typeof r === 'string') {
+        const ruleFn = (rules as any)[r];
+        if (!ruleFn) throw new Error(`Rule not found: ${r}`);
+        return ruleFn;
+      }
+      return r;
+    });
+  }
 
-  if (result.isValid) {
-    console.log('Validation successful!');
-    console.log('Sanitized data:', JSON.stringify(result.data, null, 2));
-    process.exit(0);
-  } else {
-    console.error('Validation failed:');
-    console.error(JSON.stringify(result.errors, null, 2));
+  const resolvedSanitizers: FieldSanitizers = {};
+  if (rawConfig.sanitizers) {
+    for (const field in rawConfig.sanitizers) {
+      resolvedSanitizers[field] = (rawConfig.sanitizers[field] as any[]).map(s => {
+        if (typeof s === 'string') {
+          const sanitizerFn = (sanitizers as any)[s];
+          if (!sanitizerFn) throw new Error(`Sanitizer not found: ${s}`);
+          return sanitizerFn;
+        }
+        return s;
+      });
+    }
+  }
+
+  const config: ValidatorConfig = {
+    ...rawConfig,
+    rules: resolvedRules,
+    sanitizers: resolvedSanitizers
+  };
+
+  const validator = new Validator(config);
+  try {
+    const result = await validator.validate(data);
+
+    if (result.isValid) {
+      console.log('Validation successful!');
+      console.log('Sanitized data:', JSON.stringify(result.data, null, 2));
+      process.exit(0);
+    } else {
+      console.error('Validation failed:');
+      console.error(JSON.stringify(result.errors, null, 2));
+      process.exit(1);
+    }
+  } catch (err: any) {
+    console.error(`Runtime Error: ${err.message}`);
     process.exit(1);
   }
 }
