@@ -86,9 +86,12 @@ Example:
   for (const field in rawConfig.rules) {
     resolvedRules[field] = (rawConfig.rules[field] as any[]).map(r => {
       if (typeof r === 'string') {
-        const ruleFn = (rules as any)[r];
-        if (!ruleFn) throw new Error(`Rule not found: ${r}`);
-        return ruleFn;
+        const [name, ...args] = r.split(':');
+        const ruleFn = (rules as any)[name];
+        if (!ruleFn) throw new Error(`Rule not found: ${name}`);
+        
+        // If it's a factory (has args), call it; otherwise use as is
+        return args.length > 0 ? ruleFn(...args.map(a => isNaN(Number(a)) ? a : Number(a))) : ruleFn;
       }
       return r;
     });

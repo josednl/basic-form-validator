@@ -29,10 +29,10 @@ You can validate JSON files or raw JSON strings.
 
 ```bash
 # Basic usage (JSON output)
-npm run dev -- '{"email": "user@example.com", "age": 30}'
+npm run dev -- '{\"email\":\"user@example.com\",\"age\":30}'
 
 # With table format and Spanish language
-npm run dev -- data.json --format table --lang es
+npm run dev -- showcase.json --format table --lang es
 
 # Available options:
 # -f, --format <format>  Output format: json (default), table

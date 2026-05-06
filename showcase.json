@@ -1,0 +1,33 @@
+{
+  "data": {
+    "organization": "  ACME Corp  ",
+    "department": {
+      "name": "Research & Development",
+      "head": {
+        "email": "CHIEF@ACME.CO",
+        "age": "45"
+      }
+    },
+    "employees": [
+      { "name": "Alice Smith", "email": "alice@acme.co", "salary": 50000, "skills": ["ts", "js"] },
+      { "name": "Bob Jones", "email": "bob-at-acme.co", "salary": "invalid", "skills": [] },
+      { "name": "Charlie", "email": "charlie@acme.co", "salary": 75000, "skills": ["go"] }
+    ]
+  },
+  "config": {
+    "rules": {
+      "organization": ["required", "minLength:5"],
+      "department.head.email": ["required", "email"],
+      "department.head.age": ["isNumber"],
+      "employees.*.name": ["required", "minLength:8"],
+      "employees.*.email": ["required", "email"],
+      "employees.*.salary": ["required", "isNumber"]
+    },
+    "sanitizers": {
+      "organization": ["trim"],
+      "department.head.email": ["trim", "toLowerCase"],
+      "department.head.age": ["toNumber"],
+      "employees.*.salary": ["toNumber"]
+    }
+  }
+}

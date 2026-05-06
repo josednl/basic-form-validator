@@ -1,28 +1,50 @@
 {
   "data": {
     "user": {
-      "name": "  jose d  ",
-      "email": "JOSE@Example.com"
+      "profile": {
+        "firstName": "  john  ",
+        "lastName": "  doe  ",
+        "bio": "Software developer"
+      },
+      "contact": {
+        "email": "JOSE@EXAMPLE.COM",
+        "preferences": {
+          "newsletter": true
+        }
+      }
     },
-    "orders": [
-      { "id": "ORD-001", "amount": 50.5, "status": "pending" },
-      { "id": "ORD-002", "amount": "120.75", "status": "shipped" },
-      { "id": "ORD-003", "amount": 0, "status": "processed" }
+    "inventory": [
+      { "sku": "ABC-123", "price": "45.99", "tags": ["tech", "new"] },
+      { "sku": "XYZ-789", "price": 10.5, "tags": [] },
+      { "sku": "ERR-000", "price": "invalid", "tags": null }
     ],
-    "isLate": true,
-    "reason": ""
+    "metadata": {
+      "tags": "  IMPORTANT, URGENT  ",
+      "priority": 1
+    }
   },
   "config": {
     "rules": {
-      "user.name": ["required"],
-      "user.email": ["required", "email"],
-      "orders.*.id": ["required"],
-      "orders.*.amount": ["isNumber"]
+      "user.profile.firstName": ["required"],
+      "user.profile.lastName": ["required"],
+      "user.profile.bio": ["minLength:10"],
+      "user.contact.email": ["required", "email"],
+      "inventory.*.sku": ["required"],
+      "inventory.*.price": ["required", "isNumber"],
+      "metadata.priority": ["isNumber"]
     },
     "sanitizers": {
-      "user.name": ["trim", "toUpperCase"],
-      "user.email": ["trim", "toLowerCase"],
-      "orders.*.amount": ["toNumber"]
+      "user.profile.firstName": ["trim", "toUpperCase"],
+      "user.profile.lastName": ["trim", "toUpperCase"],
+      "user.contact.email": ["trim", "toLowerCase"],
+      "inventory.*.price": ["toNumber"],
+      "metadata.tags": ["trim"]
+    },
+    "messages": {
+      "required": "Attention! This field cannot be empty.",
+      "email": "The email format '{value}' is not valid.",
+      "minLength": "Too short. At least {min} characters are required.",
+      "isNumber": "A number was expected, but something else was received."
     }
   }
 }
