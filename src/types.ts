@@ -5,33 +5,39 @@ export interface ValidationError {
 
 export type ValidationRuleResult = string | ValidationError | null;
 
-export type ValidationRule = (
-  value: any, 
+export type ValidationRule<T = any> = (
+  value: T, 
   context?: any
 ) => ValidationRuleResult | Promise<ValidationRuleResult>;
 
-export type SanitizerRule = (value: any, context?: any) => any | Promise<any>;
+export type SanitizerRule<T = any> = (value: T, context?: any) => T | Promise<T>;
 
-export interface FieldRules {
-  [field: string]: ValidationRule[];
-}
+export type FieldRules<T = any> = {
+  [K in keyof T]?: ValidationRule<T[K]>[];
+} & {
+  [key: string]: ValidationRule<any>[];
+};
 
-export interface FieldSanitizers {
-  [field: string]: SanitizerRule[];
-}
+export type FieldSanitizers<T = any> = {
+  [K in keyof T]?: SanitizerRule<T[K]>[];
+} & {
+  [key: string]: SanitizerRule<any>[];
+};
 
 export interface ValidationErrors {
   [field: string]: string[];
 }
 
-export interface ValidationResult {
+export interface ValidationResult<T = any> {
   isValid: boolean;
   errors: ValidationErrors;
-  data: any;
+  data: T;
 }
 
-export interface ValidatorConfig {
-  rules: FieldRules;
-  sanitizers?: FieldSanitizers;
+export interface ValidatorConfig<T = any> {
+  rules: FieldRules<T>;
+  sanitizers?: FieldSanitizers<T>;
   messages?: Record<string, string>;
 }
+
+export type InferType<R> = R extends FieldRules<infer T> ? T : any;

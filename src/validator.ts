@@ -9,12 +9,12 @@ import type {
 import { getDeepValue, setDeepValue, expandPaths } from './utils.js';
 import { defaultMessages, formatMessage } from './messages.js';
 
-export class Validator {
-  private rules: FieldRules;
-  private sanitizers: FieldSanitizers;
+export class Validator<T extends Record<string, any> = any> {
+  private rules: FieldRules<T>;
+  private sanitizers: FieldSanitizers<T>;
   private messages: Record<string, string>;
 
-  constructor(config: ValidatorConfig) {
+  constructor(config: ValidatorConfig<T>) {
     this.rules = config.rules;
     this.sanitizers = config.sanitizers || {};
     this.messages = { ...defaultMessages, ...(config.messages || {}) };
@@ -29,22 +29,24 @@ export class Validator {
     return 'Invalid value';
   }
 
-  async validate(data: Record<string, any>): Promise<ValidationResult> {
+  async validate(data: T): Promise<ValidationResult<T>> {
     const errors: ValidationErrors = {};
     let isValid = true;
-    const validatedData = JSON.parse(JSON.stringify(data)); // Deep clone
+    const validatedData = JSON.parse(JSON.stringify(data)) as T; // Deep clone
 
     // 1. Sanitization
     for (const pattern in this.sanitizers) {
       const paths = expandPaths(validatedData, pattern);
-      const fieldSanitizers = this.sanitizers[pattern];
+      const fieldSanitizers = this.sanitizers[pattern] as any[];
       
-      for (const path of paths) {
-        let value = getDeepValue(validatedData, path);
-        for (const sanitizer of fieldSanitizers) {
-          value = await sanitizer(value, validatedData);
+      if (fieldSanitizers) {
+        for (const path of paths) {
+          let value = getDeepValue(validatedData, path);
+          for (const sanitizer of fieldSanitizers) {
+            value = await sanitizer(value, validatedData);
+          }
+          setDeepValue(validatedData, path, value);
         }
-        setDeepValue(validatedData, path, value);
       }
     }
 
@@ -56,14 +58,16 @@ export class Validator {
     }
 
     const fieldPromises = allFieldPaths.map(async ({ path, pattern }) => {
-      const fieldRules = this.rules[pattern];
+      const fieldRules = this.rules[pattern] as any[];
       const value = getDeepValue(validatedData, path);
       const fieldErrors: string[] = [];
 
-      for (const rule of fieldRules) {
-        const errorResult = await rule(value, validatedData);
-        if (errorResult) {
-          fieldErrors.push(this.resolveErrorMessage(errorResult));
+      if (fieldRules) {
+        for (const rule of fieldRules) {
+          const errorResult = await rule(value, validatedData);
+          if (errorResult) {
+            fieldErrors.push(this.resolveErrorMessage(errorResult));
+          }
         }
       }
 

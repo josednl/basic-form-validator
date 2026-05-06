@@ -48,11 +48,7 @@ This document serves as the foundational mandate for Gemini CLI when working on 
 - [x] **Testing**: Write Vitest tests covering all validation functions and edge cases.
 - [x] **Exportable Module**: Ensure the Validator can be imported and used programmatically in other projects.
 - [x] **Advanced Validation**: Implement async validations, conditional rules, nested objects/arrays support, and data transformation/sanitization.
-- [ ] **UX & DX**: Add i18n for error messages, type inference from schemas, and CLI output formatters (JSON, Table).
-    - [x] CLI Output Formatters (JSON, Table)
-    - [x] i18n for error messages
-    - [ ] Type inference from schemas
-
+- [x] **UX & DX**: Add i18n for error messages, type inference from schemas, and CLI output formatters (JSON, Table).
 - [ ] **Ecosystem & Integrations**: Create Express/Fastify middleware, ensure frontend compatibility, and build a schema generator.
 - [ ] **Quality & Performance**: Implement benchmarks for performance testing and configure code coverage reporting.
 
