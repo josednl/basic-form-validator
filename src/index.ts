@@ -13,21 +13,40 @@ export * from './types.js';
 async function runCLI() {
   const args = process.argv.slice(2);
 
-  if (args.length === 0 || args.includes('--help') || args.includes('-h')) {
+  const help = args.includes('--help') || args.includes('-h');
+  if (args.length === 0 || help) {
     console.log(`
 Usage:
-  form-validator <json-file>
-  form-validator '<json-string>'
+  form-validator <json-file> [options]
+  form-validator '<json-string>' [options]
+
+Options:
+  -f, --format <format>  Output format: json (default), table
+  -h, --help             Show this help message
 
 Example:
-  form-validator data.json
-  form-validator '{"name": "John"}'
+  form-validator data.json --format table
+  form-validator '{"name": "John"}' -f json
     `);
     process.exit(0);
   }
 
+  // Basic argument parsing
+  let format = 'json';
+  const formatIndex = args.findIndex(arg => arg === '--format' || arg === '-f');
+  if (formatIndex !== -1 && args[formatIndex + 1]) {
+    format = args[formatIndex + 1];
+    // Remove format flags from args to isolate the input data
+    args.splice(formatIndex, 2);
+  }
+
   let inputData: any;
   const firstArg = args[0];
+
+  if (!firstArg) {
+    console.error('Error: Missing input JSON file or string.');
+    process.exit(1);
+  }
 
   try {
     if (fs.existsSync(firstArg)) {
@@ -86,15 +105,28 @@ Example:
   try {
     const result = await validator.validate(data);
 
-    if (result.isValid) {
-      console.log('Validation successful!');
-      console.log('Sanitized data:', JSON.stringify(result.data, null, 2));
-      process.exit(0);
+    if (format === 'table') {
+      if (result.isValid) {
+        console.log('\x1b[32m✔ Validation successful!\x1b[0m');
+        console.log('\nSanitized data:');
+        console.table(result.data);
+      } else {
+        console.error('\x1b[31m✘ Validation failed:\x1b[0m\n');
+        const tableData = Object.entries(result.errors).flatMap(([field, errors]) => 
+          errors.map(error => ({ Field: field, Error: error }))
+        );
+        console.table(tableData);
+      }
     } else {
-      console.error('Validation failed:');
-      console.error(JSON.stringify(result.errors, null, 2));
-      process.exit(1);
+      // Default: JSON
+      if (result.isValid) {
+        console.log(JSON.stringify({ status: 'success', data: result.data }, null, 2));
+      } else {
+        console.error(JSON.stringify({ status: 'error', errors: result.errors }, null, 2));
+      }
     }
+    
+    process.exit(result.isValid ? 0 : 1);
   } catch (err: any) {
     console.error(`Runtime Error: ${err.message}`);
     process.exit(1);
