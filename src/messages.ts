@@ -1,8 +1,22 @@
-export const defaultMessages: Record<string, string> = {
+export const enMessages: Record<string, string> = {
   'required': 'This field is required',
   'email': 'Invalid email format',
   'minLength': 'Minimum length is {min} characters',
   'isNumber': 'Value must be a number',
+};
+
+export const esMessages: Record<string, string> = {
+  'required': 'Este campo es obligatorio',
+  'email': 'Formato de correo electrónico inválido',
+  'minLength': 'La longitud mínima es de {min} caracteres',
+  'isNumber': 'El valor debe ser un número',
+};
+
+export const defaultMessages = enMessages;
+
+export const translations: Record<string, Record<string, string>> = {
+  en: enMessages,
+  es: esMessages,
 };
 
 /**
