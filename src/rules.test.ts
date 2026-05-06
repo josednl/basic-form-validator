@@ -4,9 +4,9 @@ import { required, email, minLength, isNumber } from './rules.js';
 describe('Validation Rules', () => {
   describe('required', () => {
     it('should return error for empty values', () => {
-      expect(required('')).toBe('This field is required');
-      expect(required(null)).toBe('This field is required');
-      expect(required(undefined)).toBe('This field is required');
+      expect(required('')).toEqual({ key: 'required' });
+      expect(required(null)).toEqual({ key: 'required' });
+      expect(required(undefined)).toEqual({ key: 'required' });
     });
 
     it('should return null for non-empty values', () => {
@@ -18,9 +18,9 @@ describe('Validation Rules', () => {
 
   describe('email', () => {
     it('should return error for invalid emails', () => {
-      expect(email('invalid-email')).toBe('Invalid email format');
-      expect(email('test@')).toBe('Invalid email format');
-      expect(email('@domain.com')).toBe('Invalid email format');
+      expect(email('invalid-email')).toEqual({ key: 'email' });
+      expect(email('test@')).toEqual({ key: 'email' });
+      expect(email('@domain.com')).toEqual({ key: 'email' });
     });
 
     it('should return null for valid emails', () => {
@@ -36,7 +36,7 @@ describe('Validation Rules', () => {
   describe('minLength', () => {
     it('should return error if length is less than min', () => {
       const min3 = minLength(3);
-      expect(min3('ab')).toBe('Minimum length is 3 characters');
+      expect(min3('ab')).toEqual({ key: 'minLength', params: { min: 3 } });
     });
 
     it('should return null if length is enough', () => {
@@ -48,8 +48,8 @@ describe('Validation Rules', () => {
 
   describe('isNumber', () => {
     it('should return error for non-numbers', () => {
-      expect(isNumber('123')).toBe('Value must be a number');
-      expect(isNumber(NaN)).toBe('Value must be a number');
+      expect(isNumber('123')).toEqual({ key: 'isNumber' });
+      expect(isNumber(NaN)).toEqual({ key: 'isNumber' });
     });
 
     it('should return null for numbers', () => {

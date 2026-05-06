@@ -50,7 +50,7 @@ This document serves as the foundational mandate for Gemini CLI when working on 
 - [x] **Advanced Validation**: Implement async validations, conditional rules, nested objects/arrays support, and data transformation/sanitization.
 - [ ] **UX & DX**: Add i18n for error messages, type inference from schemas, and CLI output formatters (JSON, Table).
     - [x] CLI Output Formatters (JSON, Table)
-    - [ ] i18n for error messages
+    - [x] i18n for error messages
     - [ ] Type inference from schemas
 
 - [ ] **Ecosystem & Integrations**: Create Express/Fastify middleware, ensure frontend compatibility, and build a schema generator.

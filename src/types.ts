@@ -1,4 +1,15 @@
-export type ValidationRule = (value: any, context?: any) => string | null | Promise<string | null>;
+export interface ValidationError {
+  key: string;
+  params?: Record<string, any>;
+}
+
+export type ValidationRuleResult = string | ValidationError | null;
+
+export type ValidationRule = (
+  value: any, 
+  context?: any
+) => ValidationRuleResult | Promise<ValidationRuleResult>;
+
 export type SanitizerRule = (value: any, context?: any) => any | Promise<any>;
 
 export interface FieldRules {
@@ -22,7 +33,5 @@ export interface ValidationResult {
 export interface ValidatorConfig {
   rules: FieldRules;
   sanitizers?: FieldSanitizers;
-  messages?: {
-    [ruleName: string]: string;
-  };
+  messages?: Record<string, string>;
 }

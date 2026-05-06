@@ -3,17 +3,30 @@ import type {
   ValidationErrors, 
   ValidatorConfig,
   FieldRules,
-  FieldSanitizers
+  FieldSanitizers,
+  ValidationRuleResult
 } from './types.js';
 import { getDeepValue, setDeepValue, expandPaths } from './utils.js';
+import { defaultMessages, formatMessage } from './messages.js';
 
 export class Validator {
   private rules: FieldRules;
   private sanitizers: FieldSanitizers;
+  private messages: Record<string, string>;
 
   constructor(config: ValidatorConfig) {
     this.rules = config.rules;
     this.sanitizers = config.sanitizers || {};
+    this.messages = { ...defaultMessages, ...(config.messages || {}) };
+  }
+
+  private resolveErrorMessage(result: ValidationRuleResult): string {
+    if (typeof result === 'string') return result;
+    if (result && typeof result === 'object' && 'key' in result) {
+      const template = this.messages[result.key] || result.key;
+      return formatMessage(template, result.params);
+    }
+    return 'Invalid value';
   }
 
   async validate(data: Record<string, any>): Promise<ValidationResult> {
@@ -48,9 +61,9 @@ export class Validator {
       const fieldErrors: string[] = [];
 
       for (const rule of fieldRules) {
-        const error = await rule(value, validatedData);
-        if (error) {
-          fieldErrors.push(error);
+        const errorResult = await rule(value, validatedData);
+        if (errorResult) {
+          fieldErrors.push(this.resolveErrorMessage(errorResult));
         }
       }
 
