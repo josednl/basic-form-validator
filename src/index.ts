@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import { Validator } from './validator.js';
 import * as rules from './rules.js';
 import * as sanitizers from './sanitizers.js';
+import { translations } from './messages.js';
 import type { ValidatorConfig, FieldRules, FieldSanitizers } from './types.js';
 
 export { Validator, rules, sanitizers };
@@ -22,11 +23,12 @@ Usage:
 
 Options:
   -f, --format <format>  Output format: json (default), table
+  -l, --lang <lang>      Language for error messages: en (default), es
   -h, --help             Show this help message
 
 Example:
-  form-validator data.json --format table
-  form-validator '{"name": "John"}' -f json
+  form-validator data.json --format table --lang es
+  form-validator '{"name": "John"}' -f json -l en
     `);
     process.exit(0);
   }
@@ -36,8 +38,14 @@ Example:
   const formatIndex = args.findIndex(arg => arg === '--format' || arg === '-f');
   if (formatIndex !== -1 && args[formatIndex + 1]) {
     format = args[formatIndex + 1];
-    // Remove format flags from args to isolate the input data
     args.splice(formatIndex, 2);
+  }
+
+  let lang = 'en';
+  const langIndex = args.findIndex(arg => arg === '--lang' || arg === '-l');
+  if (langIndex !== -1 && args[langIndex + 1]) {
+    lang = args[langIndex + 1];
+    args.splice(langIndex, 2);
   }
 
   let inputData: any;
@@ -67,6 +75,11 @@ Example:
       age: ['isNumber']
     }
   };
+
+  // Load language messages if specified and not already in config
+  if (!rawConfig.messages && (translations as any)[lang]) {
+    rawConfig.messages = (translations as any)[lang];
+  }
 
   // Resolve strings to actual functions
   const resolvedRules: FieldRules = {};
