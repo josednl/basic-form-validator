@@ -38,11 +38,11 @@ describe('Advanced Validation Features', () => {
       });
 
       // Case 1: isLate is false, reason is not required
-      const result1 = await validator.validate({ isLate: false, reason: '' });
+      const result1 = await validator.validate({ isLate: false, reason: '' } as any);
       expect(result1.isValid).toBe(true);
 
       // Case 2: isLate is true, reason is required
-      const result2 = await validator.validate({ isLate: true, reason: '' });
+      const result2 = await validator.validate({ isLate: true, reason: '' } as any);
       expect(result2.isValid).toBe(false);
       expect(result2.errors.reason).toContain('This field is required');
     });
@@ -59,7 +59,7 @@ describe('Advanced Validation Features', () => {
         }
       });
 
-      const result = await validator.validate({ check: true, secret: '' });
+      const result = await validator.validate({ check: true, secret: '' } as any);
       expect(result.isValid).toBe(false);
       expect(result.errors.secret).toContain('This field is required');
     });

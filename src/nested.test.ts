@@ -16,7 +16,7 @@ describe('Nested Structures', () => {
         profile: { name: '' },
         email: 'invalid'
       }
-    });
+    } as any);
 
     expect(result.isValid).toBe(false);
     expect(result.errors['user.profile.name']).toContain('This field is required');
@@ -36,7 +36,7 @@ describe('Nested Structures', () => {
         { id: 1, email: 'valid@example.com' },
         { id: null, email: 'invalid' }
       ]
-    });
+    } as any);
 
     expect(result.isValid).toBe(false);
     expect(result.errors['items.1.id']).toContain('This field is required');
@@ -60,10 +60,10 @@ describe('Nested Structures', () => {
         { name: '  Item 1  ' },
         { name: '  Item 2  ' }
       ]
-    });
+    } as any);
 
-    expect(result.data.user.name).toBe('John');
-    expect(result.data.items[0].name).toBe('Item 1');
-    expect(result.data.items[1].name).toBe('Item 2');
+    expect((result.data as any).user.name).toBe('John');
+    expect((result.data as any).items[0].name).toBe('Item 1');
+    expect((result.data as any).items[1].name).toBe('Item 2');
   });
 });

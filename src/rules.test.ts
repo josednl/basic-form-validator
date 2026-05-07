@@ -48,7 +48,7 @@ describe('Validation Rules', () => {
 
   describe('isNumber', () => {
     it('should return error for non-numbers', () => {
-      expect(isNumber('123')).toEqual({ key: 'isNumber' });
+      expect(isNumber('123' as any)).toEqual({ key: 'isNumber' });
       expect(isNumber(NaN)).toEqual({ key: 'isNumber' });
     });
 

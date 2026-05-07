@@ -15,13 +15,13 @@ export type SanitizerRule<T = any> = (value: T, context?: any) => T | Promise<T>
 export type FieldRules<T = any> = {
   [K in keyof T]?: ValidationRule<T[K]>[];
 } & {
-  [key: string]: ValidationRule<any>[];
+  [key: string]: ValidationRule<any>[] | undefined 
 };
 
 export type FieldSanitizers<T = any> = {
   [K in keyof T]?: SanitizerRule<T[K]>[];
 } & {
-  [key: string]: SanitizerRule<any>[];
+  [key: string]: SanitizerRule<any>[] | undefined;
 };
 
 export interface ValidationErrors {
