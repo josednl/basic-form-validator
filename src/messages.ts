@@ -2,14 +2,16 @@ export const enMessages: Record<string, string> = {
   'required': 'This field is required',
   'email': 'Invalid email format',
   'minLength': 'Minimum length is {min} characters',
-  'isNumber': 'Value must be a number',
+  'isNumber': 'This field must be a number',
+  'min': 'Minimum value is {min}'
 };
 
 export const esMessages: Record<string, string> = {
   'required': 'Este campo es obligatorio',
   'email': 'Formato de correo electrónico inválido',
   'minLength': 'La longitud mínima es de {min} caracteres',
-  'isNumber': 'El valor debe ser un número',
+  'isNumber': 'Este campo debe ser un número',
+  'min': 'El valor mínimo es {min}'
 };
 
 export const defaultMessages = enMessages;

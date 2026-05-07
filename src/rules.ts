@@ -32,6 +32,14 @@ export const isNumber: ValidationRule<number> = (value: any) => {
   return null;
 };
 
+export const min = (minValue: number): ValidationRule<number> => (value: any) => {
+  if (value === undefined || value === null) return null;
+  if (typeof value !== 'number' || value < minValue) {
+    return { key: 'min', params: { min: minValue } };
+  }
+  return null;
+};
+
 export const when = (
   condition: (data: any) => boolean | Promise<boolean>,
   rules: ValidationRule<any>[]

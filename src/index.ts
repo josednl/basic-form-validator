@@ -4,9 +4,10 @@ import * as rules from './rules.js';
 import * as sanitizers from './sanitizers.js';
 import { translations } from './messages.js';
 import { validate as expressMiddleware } from './middleware.js';
+import * as s from './schema.js';
 import type { ValidatorConfig, FieldRules, FieldSanitizers } from './types.js';
 
-export { Validator, rules, sanitizers, expressMiddleware };
+export { Validator, rules, sanitizers, expressMiddleware, s };
 export * from './types.js';
 
 /**
