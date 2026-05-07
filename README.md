@@ -42,19 +42,28 @@ npm run dev -- showcase.json --format table --lang es
 
 ### Module (Node & Browser)
 
-The library is now environment-agnostic and can be used in both Node.js and browser environments.
+The library is environment-agnostic and can be used in both Node.js and browser environments.
 
+#### Schema-based Validation (Fluent API)
 ```typescript
-import { Validator, s } from 'basic-form-validator';
+import { s } from 'basic-form-validator';
 
-// Schema-based validation
 const userSchema = s.object({
-  name: s.string().required(),
+  name: s.string().required().minLength(3),
   age: s.number().min(18)
 });
 
 const validator = userSchema.build();
-const result = await validator.validate({ name: 'John', age: 20 });
+const result = await validator.validate({ name: 'Jo', age: 16 });
+```
+
+#### Manual Validation
+```typescript
+import { Validator, rules } from 'basic-form-validator';
+
+const validator = new Validator({
+  rules: { age: [rules.isNumber] }
+});
 ```
 
 ### Express Middleware
