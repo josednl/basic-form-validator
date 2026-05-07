@@ -40,48 +40,21 @@ npm run dev -- showcase.json --format table --lang es
 # -h, --help             Show help
 ```
 
-### Module
+### Module (Node & Browser)
 
-#### Type Inference & Validation
-
-```typescript
-import { Validator, rules, sanitizers } from './dist/index.js';
-
-interface User {
-  email: string;
-  age: number;
-}
-
-const validator = new Validator<User>({
-  rules: {
-    'email': [rules.required, rules.email],
-    'age': [rules.isNumber]
-  },
-  sanitizers: {
-    'email': [sanitizers.trim, sanitizers.toLowerCase]
-  }
-});
-
-const result = await validator.validate({ 
-  email: '  JOHN@Example.com  ',
-  age: 25
-});
-
-if (result.isValid) {
-  console.log(result.data.email); // 'john@example.com' (typed as string)
-}
-```
-
-#### Internationalization (i18n)
+The library is now environment-agnostic and can be used in both Node.js and browser environments.
 
 ```typescript
-import { Validator, rules } from './dist/index.js';
-import { esMessages } from './dist/messages.js';
+import { Validator, s } from 'basic-form-validator';
 
-const validator = new Validator({
-  rules: { age: [rules.isNumber] },
-  messages: esMessages // Use Spanish translations
+// Schema-based validation
+const userSchema = s.object({
+  name: s.string().required(),
+  age: s.number().min(18)
 });
+
+const validator = userSchema.build();
+const result = await validator.validate({ name: 'John', age: 20 });
 ```
 
 ### Express Middleware

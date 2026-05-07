@@ -49,7 +49,7 @@ This document serves as the foundational mandate for Gemini CLI when working on 
 - [x] **Exportable Module**: Ensure the Validator can be imported and used programmatically in other projects.
 - [x] **Advanced Validation**: Implement async validations, conditional rules, nested objects/arrays support, and data transformation/sanitization.
 - [x] **UX & DX**: Add i18n for error messages, type inference from schemas, and CLI output formatters (JSON, Table).
-- [ ] **Ecosystem & Integrations**: Create Express middleware (Express done), ensure frontend compatibility, and build a schema generator.
+- [x] **Ecosystem & Integrations**: Create Express middleware (Express done), ensure frontend compatibility (Browser-ready), and build a schema generator.
 - [ ] **Quality & Performance**: Implement benchmarks for performance testing and configure code coverage reporting.
 
 ## Evolution Notes
@@ -69,3 +69,7 @@ This document serves as the foundational mandate for Gemini CLI when working on 
 - [2026-05-07]: Express Integration & Type Cleanup
 -> Reason: Resolved TypeScript errors in tests and implemented Express middleware with automatic sanitization.
 -> Implication: The library is now easier to use in web servers, and the type system is more robust and developer-friendly.
+
+- [2026-05-07]: Frontend Compatibility
+-> Reason: Decoupled CLI-specific logic from the library to allow usage in browser environments.
+-> Implication: The library is now environment-agnostic and ready for frontend frameworks.

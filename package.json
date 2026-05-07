@@ -5,10 +5,10 @@
   "type": "module",
   "main": "dist/index.js",
   "bin": {
-    "form-validator": "dist/index.js"
+    "form-validator": "dist/bin.js"
   },
   "scripts": {
-    "dev": "tsx src/index.ts",
+    "dev": "tsx src/bin.ts",
     "build": "tsc",
     "test": "vitest",
     "precommit": "tsc --noEmit && vitest run"
