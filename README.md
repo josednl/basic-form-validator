@@ -84,6 +84,45 @@ const validator = new Validator({
 });
 ```
 
+### Express Middleware
+
+Easily integrate the validator into your Express routes.
+
+```typescript
+import express from 'express';
+import { expressMiddleware, rules, sanitizers } from 'basic-form-validator';
+
+const app = express();
+app.use(express.json());
+
+const registrationRules = {
+  rules: {
+    email: [rules.required, rules.email],
+    password: [rules.required, rules.minLength(8)]
+  },
+  sanitizers: {
+    email: [sanitizers.trim, sanitizers.toLowerCase]
+  }
+};
+
+app.post('/register', expressMiddleware(registrationRules), (req, res) => {
+  // req.body is already validated and sanitized here!
+  res.send('User registered successfully');
+});
+
+// Advanced: Custom source and error handling
+app.get('/search', expressMiddleware({
+  rules: { q: [rules.required] }
+}, {
+  source: 'query',
+  onError: (errors, req, res) => {
+    res.status(422).json({ msg: 'Check your search query', details: errors });
+  }
+}), (req, res) => {
+  res.send(`Searching for: ${req.query.q}`);
+});
+```
+
 ## Development
 
 - `npm run dev`: Run the CLI in development mode using `tsx`.
