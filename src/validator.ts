@@ -9,6 +9,9 @@ import type {
 import { getDeepValue, setDeepValue, expandPaths } from './utils.js';
 import { defaultMessages, formatMessage } from './messages.js';
 
+/**
+ * Core validation engine for processing data against rules and sanitizers.
+ */
 export class Validator<T extends Record<string, any> = any> {
   private rules: FieldRules<T>;
   private sanitizers: FieldSanitizers<T>;
@@ -29,6 +32,9 @@ export class Validator<T extends Record<string, any> = any> {
     return 'Invalid value';
   }
 
+  /**
+   * Validates and sanitizes data. Returns a deep clone of the processed data.
+   */
   async validate(data: T): Promise<ValidationResult<T>> {
     const errors: ValidationErrors = {};
     let isValid = true;

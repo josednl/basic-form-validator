@@ -22,12 +22,18 @@ export abstract class SchemaNode<T = any> {
     return config;
   }
 
+  /**
+   * Generates a Validator instance from the defined schema.
+   */
   build(): Validator<any> {
     const config = this.buildConfig();
     return new Validator(config as any);
   }
 }
 
+/**
+ * Node for string validation.
+ */
 export class StringNode extends SchemaNode<string> {
   protected getType(): string { return ''; }
 
@@ -42,6 +48,9 @@ export class StringNode extends SchemaNode<string> {
   }
 }
 
+/**
+ * Node for number validation.
+ */
 export class NumberNode extends SchemaNode<number> {
   protected getType(): number { return 0; }
 
@@ -56,10 +65,16 @@ export class NumberNode extends SchemaNode<number> {
   }
 }
 
+/**
+ * Node for boolean validation.
+ */
 export class BooleanNode extends SchemaNode<boolean> {
   protected getType(): boolean { return false; }
 }
 
+/**
+ * Node for object validation, enabling nested schemas.
+ */
 export class ObjectNode<T extends Record<string, SchemaNode>> extends SchemaNode<{
   [K in keyof T]: T[K] extends SchemaNode<infer U> ? U : any
 }> {
