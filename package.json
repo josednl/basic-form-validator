@@ -15,6 +15,8 @@
     "dev": "tsx src/bin.ts",
     "build": "tsc",
     "test": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "test:bench": "vitest bench --run",
     "precommit": "tsc --noEmit && vitest run"
   },
   "keywords": [
@@ -28,6 +30,7 @@
   "devDependencies": {
     "@types/express": "^5.0.6",
     "@types/node": "^25.6.0",
+    "@vitest/coverage-v8": "^1.6.1",
     "tsx": "^4.9.3",
     "typescript": "^5.4.5",
     "vitest": "^1.6.0"

@@ -18,16 +18,30 @@ describe('Schema Generator', () => {
     expect(invalidResult.isValid).toBe(false);
   });
 
-  it('should handle nested objects', async () => {
+  it('should handle boolean and all nodes', async () => {
     const schema = s.object({
-      user: s.object({
-        name: s.string().required()
-      })
+      isActive: s.boolean(),
+      email: s.string().email(),
+      bio: s.string().minLength(10),
+      score: s.number().min(0)
     });
 
     const validator = schema.build();
     
-    const result = await validator.validate({ user: { name: 'John' } } as any);
+    const result = await validator.validate({ 
+      isActive: true, 
+      email: 'test@example.com', 
+      bio: 'This is a long bio', 
+      score: 100 
+    });
     expect(result.isValid).toBe(true);
+
+    const invalidResult = await validator.validate({ 
+      isActive: 'yes' as any, 
+      email: 'not-an-email', 
+      bio: 'short', 
+      score: -1 
+    });
+    expect(invalidResult.isValid).toBe(false);
   });
 });

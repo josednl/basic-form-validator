@@ -55,24 +55,35 @@ describe('Validator', () => {
     expect(result.errors.username).toContain('Username already taken');
   });
 
-  it('should apply sanitizers', async () => {
-    const trim = (val: string) => val.trim();
-    const toLower = (val: string) => val.toLowerCase();
-
+  it('should apply all built-in sanitizers', async () => {
+    const { trim, toLowerCase, toUpperCase, toNumber, escape } = await import('./sanitizers.js');
+    
     const validator = new Validator({
-      rules: {
-        email: [required]
-      },
+      rules: {},
       sanitizers: {
-        email: [trim, toLower]
+        t: [trim],
+        lc: [toLowerCase],
+        uc: [toUpperCase],
+        num: [toNumber],
+        esc: [escape],
+        ignored: [trim] // Test with non-string
       }
     });
 
     const result = await validator.validate({
-      email: '  JOHN@Example.com  '
-    });
+      t: '  trim me  ',
+      lc: 'LOWER',
+      uc: 'upper',
+      num: '123.45',
+      esc: '<script>alert("xss")</script>',
+      ignored: 123
+    } as any);
 
-    expect(result.isValid).toBe(true);
-    expect(result.data.email).toBe('john@example.com');
+    expect(result.data.t).toBe('trim me');
+    expect(result.data.lc).toBe('lower');
+    expect(result.data.uc).toBe('UPPER');
+    expect(result.data.num).toBe(123.45);
+    expect(result.data.esc).toBe('&lt;script&gt;alert(&quot;xss&quot;)&lt;&#x2F;script&gt;');
+    expect(result.data.ignored).toBe(123);
   });
 });
